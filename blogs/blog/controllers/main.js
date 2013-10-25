@@ -61,7 +61,11 @@ module.exports = {
 			else
 				Post.$load(id)
 				.then(function () {
-					if (Post.getAttribute('id'))
+					var post = Post.getAttributes();
+
+					if (_.isUndefined(post.id) || (_.isUndefined(post.publishDate) && !req.user._logged))
+						req.e.error(404);	
+					else
 					{
 						User.$getUser({ _id: Post.getAttribute('user') }, { name: 1, username:1, email:1, bio:1, _id:1 })
 						.then(function (user) {
@@ -72,8 +76,7 @@ module.exports = {
 							self.render('read', { posts: Post.formatPost(Post.getAttributes()) });
 						});
 					}
-					else
-						req.e.error(404);	
+						
 				}).catch(function (err) {
 					console.error(err);
 					req.e.error(404);

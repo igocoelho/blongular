@@ -31,12 +31,12 @@
     "moment": "~2.3.1",
     "express": "~3.4.2",
     "bcrypt": "0.7.x",
-    "wns-http-package": "0.0.11",
-    "wns-mongo-package": "0.0.3",
+    "wns-http-package": "0.0.12",
+    "wns-mongo-package": "0.0.4",
     "wns-db-package": "0.0.1",
-    "wns-mvc-package": "0.0.4",
+    "wns-mvc-package": "0.0.6",
     "wns-template-package": "0.0.3",
-    "wns-express-package": "0.0.1",
+    "wns-express-package": "0.0.2",
     "wns-angular-package": "0.0.1"
   }
 }
