@@ -1,7 +1,7 @@
 {
   "name": "blongular",
   "version": "0.0.1",
-  "description": "",
+  "description": "A simple and powerful blog system using WNS, MongoDB, Angular, Bootstrap and other stuff",
   "main": "index.js",
   "moduleClass": "wnServer",
   "scripts": {
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "http://github.com/pedronasser/blongular"
+    "url": "http://github.com/blongular/blongular"
   },
   "keywords": [
     "mongo",
@@ -20,7 +20,7 @@
   "author": "Pedro Nasser <pedronasser@yept.net>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/pedronasser/blongular/issues"
+    "url": "https://github.com/blongular/blongular/issues"
   },
   "dependencies": {
     "wnserver": "0.0.92",
@@ -28,13 +28,15 @@
     "mongoose": "3.6.x",
     "dustjs-linkedin": "2.0.x",
     "dustjs-helpers": "1.1.x",
-    "wns-http-package": "*",
-    "wns-mongo-package": "*",
-    "wns-db-package": "*",
-    "wns-mvc-package": "*",
-    "wns-template-package": "*",
     "moment": "~2.3.1",
     "express": "~3.4.2",
-    "bcrypt": "0.7.x"
+    "bcrypt": "0.7.x",
+    "wns-http-package": "0.0.11",
+    "wns-mongo-package": "0.0.3",
+    "wns-db-package": "0.0.1",
+    "wns-mvc-package": "0.0.4",
+    "wns-template-package": "0.0.3",
+    "wns-express-package": "0.0.1",
+    "wns-angular-package": "0.0.1"
   }
 }
