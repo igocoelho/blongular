@@ -1,0 +1,15 @@
+{
+
+	// Edit your blog name.
+	"title": "Blongular",
+
+	// Do you have a domain? You can put it here.
+	// Ex: "mydomain.com,otherdomain.net,localhost"
+	// Leave "*" for any domain.
+	"serveralias": "*",
+
+	// Do you want to install a new theme?
+	// Put it in you blog's themes/ directory
+	// And put the name of the folder here.
+	"theme": "default"
+}

@@ -1,0 +1,15 @@
+// Server configuration (ADVANCED)
+{
+	// Directory where your blogs are.
+	"appDirectory": "blogs/",
+	
+	"components": {
+		// HTTP server configuration
+		"http": {
+			"class": "wnHttp",
+
+			// You can change Blongular listening port here.
+			"listen":[80]
+		}
+	}
+}
