@@ -97,7 +97,7 @@ module.exports = {
 		{
 			_.merge(_components,{
 				static: {
-					serve: ['themes/'+this.app.getConfig('theme')+'/public/'],
+					serve: ['upload/','themes/'+this.app.getConfig('theme')+'/public/'],
 				},
 				controller: {
 					path: {

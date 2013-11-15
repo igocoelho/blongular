@@ -7,7 +7,7 @@
 		// HTTP server configuration
 		"http": {
 			"class": "wnHttp",
-
+			"express": true,
 			// You can change Blongular listening port here.
 			"listen":[80]
 		}

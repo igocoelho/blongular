@@ -1,3 +1,3 @@
-<a href='#' class='user-avatar'><img src='/upload/{user.username}.jpeg' border=0/></a><br>
-<b>{user.showName}</b><br>
-<span class='user-bio'>{#user.bio}{.}{:else}No info{/user.bio}</span><br>
+<a href='#' class='user-avatar'><img class='avatar-img' src='http://www.gravatar.com/avatar/{user.gravatarHash}?d=mm&s=80' border=0/></a><br>
+<span class='user-name'>{#user.displayName}{.}{:else}{user.username}{/user.displayName}</span><br>
+<span class='user-bio'>{#user.bio}{.}{/user.bio}</span><br>

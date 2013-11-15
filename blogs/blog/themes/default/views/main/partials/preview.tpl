@@ -1,8 +1,8 @@
 <div class="post-body">
     <div class='post-info text-muted'>
-    		{#publishDate}{publishDate_full} {:else}Not published {/publishDate}{#primaryTag}on <a href='/tag/{.}'>{.}</a>{/primaryTag}
+    	{#publishDate}{publishDate_full} {:else}Not published {/publishDate}
     </div>
-    <a href='/post/{_id}'><h1 class='post-title'>{title}</h1></a>
+    <h1 class='post-title'><a href='/post/{#slug}{.}{:else}{_id}{/slug}'>{listTitle}</a></h1>
     <div class='post-content'>
         {preview}
     </div>

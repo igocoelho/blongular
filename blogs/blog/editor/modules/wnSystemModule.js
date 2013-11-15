@@ -1,5 +1,5 @@
 /**
- * Angular Module: Post
+ * Angular Module: System
  */
 
 // Exports
@@ -15,7 +15,7 @@ module.exports = {
 	 */
 	private: {
 		_config: {
-			moduleName: 'blongular.post'
+			moduleName: 'blongular.system'
 		},
 		_dependencies: []
 	},

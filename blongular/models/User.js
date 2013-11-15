@@ -13,7 +13,7 @@ module.exports = {
 	/**
 	 * NPM Dependencies
 	 */
-	dependencies: ['bcrypt'],
+	dependencies: ['bcrypt','crypto'],
 
 	/**
 	 * PRIVATE
@@ -62,10 +62,6 @@ module.exports = {
 					required: true,
 					unique: true
 				},
-				name: {
-					type: String,
-					label: 'Name'
-				},
 				username: {
 					type: String,
 					label: 'Username',
@@ -77,6 +73,14 @@ module.exports = {
 					label: 'Password',
 					required: true
 				},
+				name: {
+					type: String,
+					label: 'Name'
+				},
+				displayName: {
+					type: String,
+					label: 'Display Name'
+				},				
 				createDate: {
 					type: Date,
 					label: 'Created',
@@ -86,9 +90,10 @@ module.exports = {
 					type: Date,
 					label: 'Updated'
 				},
-				avatar: {
+				gravatarEmail: {
 					type: String,
-					label: 'Avatar'
+					label: 'Gravatar Email',
+					required: true
 				},
 				bio: {
 					type: String,
@@ -181,25 +186,34 @@ module.exports = {
 		 */
 		$login: function (password) {
 			var findUser = {};
-			var password = password || '';
-			findUser.email = self.getAttribute('email')+'' || '';
-			var UserResult=null;
+			var password = password;
+			var email = self.getAttribute('email');
 
-			// STEP 1: GET USER
-			self.$getUser(findUser)
-			// STEP 2: COMPARE PASSWORD
-			.then(function (user) {
-				self.setAttributes(user);
-				return self.$comparePassword(password)
-			})
-			// STEP 3: Resolve Promise
-			.then(function (correct) {
-				done.resolve(true);
-			})
-			// STEP FAIL: Reject promise
-			.catch(function (err) {
-				done.reject(err);
-			})
+			if (!_.isString(password) || !_.isString(email) || password.length==0 || email.length == 0)
+				done.reject(new Error('Missing information'));
+			else
+			{
+				findUser.email = email;
+				// STEP 1: GET USER
+				self.$getUser(findUser)
+				// STEP 2: COMPARE PASSWORD
+				.then(function (user) {
+					if (user == null)
+						done.resolve(false);
+					else {
+						self.setAttributes(user);
+						return self.$comparePassword(password)
+					}
+				})
+				// STEP 3: Resolve Promise
+				.then(function (correct) {
+					done.resolve(true);
+				})
+				// STEP FAIL: Reject promise
+				.catch(function (err) {
+					done.reject(err);
+				})
+			}
 
 			return done.promise;
 		},
@@ -212,16 +226,38 @@ module.exports = {
 			if (!_.isObject(user))
 				done.reject(new Error('PROCESS_ERROR'))
 			else
-				var query = self.query(user).limit(1).select(select).exec(function (err,d) {
+			{
+				var query = self.query().find(user).limit(1).select(select).find(function (err,d) {
 					if (err)
 						done.reject(new Error('PROCESS_ERROR'));
-					else if (d==null)
+					else if (_.isNull(d) || (_.isArray(d) && d.length==0))
 						done.resolve(null);
 					else
-						done.resolve(d[0]);
+					{
+						self.setAttributes(d[0]);
+						self.getGravatar(function () {
+							done.resolve(self.getAttributes())
+						});
+					}
 				});
+			}
 
 			return done.promise;
+		},
+
+		/**
+		 * Get gravatar hash for user
+		 */
+		getGravatar: function (cb) {
+			var email = self.getAttribute('gravatarEmail');
+			if (_.isUndefined(email))
+				cb&&cb();
+			else {
+				var md5sum = crypto.createHash('md5');
+					md5sum.update(email);
+				self.setAttribute('gravatarHash',md5sum.digest('hex'));
+				cb&&cb()
+			}
 		},
 
 		/**

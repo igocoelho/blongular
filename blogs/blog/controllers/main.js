@@ -15,7 +15,7 @@ module.exports = {
 	/**
 	 * NPM Dependencies
 	 */
-	dependencies: ['mongoose'],
+	dependencies: ['mongoose','crypto'],
 
 	/**
 	 * PRIVATE
@@ -35,23 +35,32 @@ module.exports = {
 		/**
 		 * Action: Index
 		 */
-		actionIndex: function (req,query,models) {
+		actionIndex: function (req,resp,query,models) {
+
 			this.title='Home';
 
 			var Post = models.Post();
-			Post.$list(0,5,-1,!req.user._logged)
+			var maxPosts = blongular.list.maxPerPage;
+
+			var page = Number(query.GET.page || 1) - 1;
+			if (page<0)
+				page = 0;
+
+			Post.$list(page * maxPosts, maxPosts, -1,!req.user._logged)
 			.then(function (posts) {
-				self.render('list', { posts: posts });
+				page++;
+				self.render('list', { posts: posts, pageNext: posts.length>=maxPosts ? page + 1 : undefined, pageBack: page - 1 >= 1 ? page - 1 : undefined });
 			}).catch(function (err) {
 				console.log(err);
 				self.render('list', { error: err.message });
 			})
+
 		},
 
 		/**
 		 * Action: Post
 		 */
-		actionPost: function (req,query,models) {
+		actionPost: function (req,resp,query,models) {
 			var Post = models.Post();
 			var User = models.User();
 			var id = self.postId = query.GET.id;
@@ -67,7 +76,7 @@ module.exports = {
 						req.e.error(404);	
 					else
 					{
-						User.$getUser({ _id: Post.getAttribute('user') }, { name: 1, username:1, email:1, bio:1, _id:1 })
+						User.$getUser({ _id: Post.getAttribute('user') }, { displayName: 1, username: 1, bio:1, _id:1, gravatarEmail:1 })
 						.then(function (user) {
 							self.title = Post.getAttribute('title');
 							var name = user.name || user.username || user.email || user._id;
@@ -86,7 +95,7 @@ module.exports = {
 		/**
 		 * Action: Login
 		 */
-		actionLogin: function (req,query,models) {
+		actionLogin: function (req,resp,query,models) {
 
 			var User = models.User();
 			var UserPost = query.POST.fields;
@@ -106,79 +115,140 @@ module.exports = {
 						req.user.data.name=data.name||data.email;
 						req.user._logged=true;
 
-						req.redirect(UserPost.redirect || '/',true);
+						req.user.data.justLogged=true;
+						resp.redirect(UserPost.redirect || '/',true);
 					}
 					else
-						req.redirect(UserPost.redirect || '/',true);
+					{
+						req.user.data.failedLogin=true;
+						resp.redirect(UserPost.redirect || '/',true);
+					}
 				}).catch(function (err) {
-					req.redirect(UserPost.redirect || '/',true);
+					req.user.data.failedLogin=true;
+					resp.redirect(UserPost.redirect || '/',true);
 				});
 			}
 			else
-				req.redirect('/',true);
+			{
+				req.user.data.failedLogin=true;
+				resp.redirect(UserPost.redirect || '/',true);
+			}
 
 		},
 
 		/**
 		 * Action: New
 		 */
-		actionNew: function (req,query,models) {
+		actionNew: function (req,resp,query,models) {
 
 			if (!req.user._logged)
-				return req.redirect('/', true);
+				return resp.redirect('/', true);
 
 			var post = models.Post();
 			var oid = mongoose.Types.ObjectId();
 
 			post.setAttributes({
 				_id: oid,
-				title: 'New Post',
-				content: '<p>New post content</p>',
-				source: 'New post content',
+				title: '',
+				content: '',
+				source: '',
 				user: req.user.data._id,
 				slug: oid.toString()
 			})
 
 			post.$save()
 			.then(function () {
-				req.redirect('/post/'+post.getAttribute('_id'), true);
+				resp.redirect('/post/'+post.getAttribute('_id')+'#edit', true);
 			})
 			.catch(function () {
-				req.redirect('/', true)
+				resp.redirect('/', true)
 			})
+		},
+
+		/**
+		 * Action: Upload Image 
+		 */
+		actionUpload: function (req,resp,query,models) {
+			if (!req.user._logged)
+				resp.end('');
+			else {
+
+				var file = query.POST.files.file;
+
+				if (_.isArray(file))
+					file = file[0]
+
+				if (file)
+				{
+					if (blongular.upload.validTypes.indexOf(file.type)!==-1
+						&& file.size <= blongular.upload.maxSize)
+					{
+
+						var uploadDir = self.app.modulePath+'/'+blongular.upload.directory;
+						var userDir = uploadDir + '/' + req.user.data._id;
+						if (!fs.existsSync(userDir))
+						{
+							try { fs.mkdirSync(userDir); } catch (e) {}
+						}
+
+						var ext = file.name.split('.').pop();
+						var fileName = crypto.createHash('md5').update(file.name + file.size).digest("hex");
+						var uploadPath = userDir + '/' + fileName + '.' + ext;
+
+						var source = fs.createReadStream(file.path);
+						var dest = fs.createWriteStream(uploadPath);
+
+						source.pipe(dest);
+						source.on('end', function() {
+							resp.end('/'+req.user.data._id+'/'+fileName+'.'+ext);
+						});
+						source.on('error', function(err) {
+							resp.end('');
+						});
+					}
+					else
+						resp.end('');
+				} else
+					resp.end('');
+
+			}
 		},
 
 		/**
 		 * Action: Delete
 		 */
-		actionDelete: function (req,query,models) {
+		actionDelete: function (req,resp,query,models) {
 
 			if (!req.user._logged)
-				return req.redirect('/', true);
+				return resp.redirect('/', true);
 
 			var post = models.Post();
 			var _id = query.GET.id;
 
 			if (!_.isString(_id))
-				return req.redirect('/', true);
+				return resp.redirect('/', true);
 
-			post.setAttributes({ _id: _id, user: req.user.data._id })
-
-			post.$remove()
+			post.$load(_id)
 			.then(function () {
-				req.redirect('/', true);
+				if (post.getAttribute('user')+'' == req.user.data._id+'')
+					return post.$remove();
+				else 
+					resp.redirect('/post/'+_id, true);
+			})
+			.then(function () {
+				resp.redirect('/', true);
 			})
 			.catch(function () {
-				req.redirect('/post/'+_id, true)
+				resp.redirect('/post/'+_id, true)
 			})
 		},
 
 		/**
 		 * Action: Logout
 		 */
-		actionLogout: function (req,query,models) {
+		actionLogout: function (req,resp,query,models) {
 			req.user._logged=false;
-			req.redirect('/',true);
+			resp.redirect('/',true);
 		},
 
 		/**

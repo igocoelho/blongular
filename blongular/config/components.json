@@ -2,9 +2,36 @@
 
 	"components": {
 
+		// wnAngularServer configuration (remove/comment to disable)
+		"angular": {
+			"class": "wnAngularServer",
+			"useBower": true
+		},
+
 		// wnStaticServer configuration (remove/comment to disable)
 		"static": {
+			// "debug": true,
+			// "verbosity": 5,
 			"class": "wnStaticServer"
+		},
+
+		// wnCache configuration (remove/comment to disable)
+		"session": {
+			// "debug": true,
+			// "verbosity": 5,
+			"class": "wnSession"
+		},
+
+		// wnExpress configuration (remove/comment to disable)
+		"express": {
+			"class": "wnExpress",
+			"use": {
+				"express.favicon": [],
+				// "express.json": [],
+				// "express.urlencoded": [],
+				"express.methodOverride": [],
+				"app.router":true
+			}
 		},
 
 		// wnControllerServer configuration (remove/comment to disable)
@@ -22,25 +49,6 @@
 		// Rest Controller: LOGIN
 		"loginREST": {
 			"class": "wnLoginRest"
-		},
-
-		// wnExpress configuration (remove/comment to disable)
-		"express": {
-			"class": "wnExpress",
-			"attach": {
-				"route": "/xhr/.*"
-			},
-			"use": {
-				"express.cookieParser": [],
-				"express.bodyParser": [],
-				"express.methodOverride": [],
-				"app.router":true
-			}
-		},
-
-		// wnCache configuration (remove/comment to disable)
-		"session": {
-			"class": "wnSession"
 		},
 
 		// wnCache configuration (remove/comment to disable)
@@ -64,6 +72,7 @@
 		"urlManager": {
 			"class": "wnUrlManager",
 			"rules": {
+				"<page:\\d+>/?":"<controller:main>/<action:index>",
 				"<action:post>/<id:.+>":"<controller:main>/<action>",
 				"<action:new>/?":"<controller:main>/<action>",
 				"<action:delete>/<id:.+>":"<controller:main>/<action>"
@@ -78,12 +87,6 @@
 			"address": "127.0.0.1",
 			"port": 27017,
 			"database": "blongular"
-		},
-
-		// wnAngularServer configuration (remove/comment to disable)
-		"angular": {
-			"class": "wnAngularServer",
-			"useBower": true
 		}
 
 	}

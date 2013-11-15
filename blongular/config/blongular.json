@@ -6,10 +6,46 @@
 	// Do you have a domain? You can put it here.
 	// Ex: "mydomain.com,otherdomain.net,localhost"
 	// Leave "*" for any domain.
-	"serveralias": "*",
+	"servername": "*",
 
 	// Do you want to install a new theme?
 	// Put it in you blog's themes/ directory
 	// And put the name of the folder here.
-	"theme": "default"
+	"theme": "default",
+
+	// User related configuration
+	"user": {
+		// "cacheUserGravatar": true
+	},
+
+	// Post creation configuration
+	"create": {
+		// "defaultTitle": false
+	},
+
+	// Post listing configuration
+	"list": {
+		"maxPerPage": 5
+		// "showTitleOnly": false
+	},
+
+	// Post reading configuration
+	"post": {
+		// "showAuthor": true,
+		// "showAuthorBio": true
+	},
+
+	// Upload Configuration
+	"upload": {
+
+		// Upload Directory (relative to blog's base directory)
+		"directory": "upload/",
+
+		// Upload's Max Size (in bytes)
+		"maxSize": 1048576,
+
+		// Upload's Valid Types
+		"validTypes": ["image/png","image/jpg","image/jpeg","image/gif"]
+
+	}
 }

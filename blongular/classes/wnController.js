@@ -6,14 +6,17 @@
 module.exports = {
 
 	/**
+	 * Private
+	 */
+	private: {
+		blongular: {}
+	},
+
+	/**
 	 * Public Variables
 	 */
 	public: {
-		embedScript: [
-			'/js/jquery.js',
-			'/js/bootstrap.min.js',
-			'/js/medium-editor.min.js'
-		],
+		embedScript: [],
 		clientScript: []
 	},
 
@@ -27,16 +30,35 @@ module.exports = {
 		 */	
 		afterInit: function ()
 		{
+			self.blongular=blongular=this.app.getConfig();
+			blongular.siteUrl = self.request.headers.host || '';
+
 			if (this.request.user._logged)
 			{
 				self.request.logged = true;
-				this.clientScript.push('var blongularSession="'+self.request.user._sid+'";');
 				this.clientScript.push('$("#actions").show();');
 			}
 
+			var blongularSession = {
+				sid: this.request.user._sid,
+				logged: this.request.user._logged,
+				displayName: this.request.user.data.displayName,
+				justLogged: this.request.user.data.justLogged,
+				failedLogin: this.request.user.data.failedLogin
+			};
+
+			if (this.request.user.data.justLogged)
+				this.request.user.data.justLogged=false;
+
+			if (this.request.user.data.failedLogin)
+				this.request.user.data.failedLogin=false;
+
+			this.clientScript.push('var blongularSession='+JSON.stringify(blongularSession)+';');
+
+			this.embedScript.push('/angular.app.js');
 			this.clientScript.push(
 				"window.bootstrap = function() {"+
-				"    angular.bootstrap(document, ['"+self.request.angular.appName+"']);"+
+				"    angular.bootstrap(document, ['"+self.response.angular.appName+"']);"+
 				"};"+
 				"window.init = function() {"+
 				"    window.bootstrap();"+
@@ -48,14 +70,6 @@ module.exports = {
 			);
 
 			this.clientScript.push("$('.navBtn').tooltip({ placement: 'bottom', container: 'body' })");
-
-			// _.extend(self.request.header,{
-			// 	'Access-Control-Allow-Origin':'*',
-			// 	"Access-Control-Allow-Credentials":"true",
-			// 	'Access-Control-Allow-Headers':'X-Requested-With, Content-Type, Cookie',
-			// 	'Access-Control-Allow-Methods':'POST, GET, OPTIONS, DELETE, PUT',
-			// 	'Access-Control-Max-Age':'86400'
-			// });
 		}
 
 	}

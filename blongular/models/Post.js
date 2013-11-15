@@ -58,6 +58,10 @@ module.exports = {
 					type: String,
 					label: 'Title'
 				},
+				subtitle: {
+					type: String,
+					label: 'Subtitle'
+				},				
 				content: {
 					type: String,
 					label: 'Content',
@@ -86,8 +90,20 @@ module.exports = {
 			else
 			{
 				var post = _.extend({},post);
-				post.preview = function (chunk) { return chunk.write(this.html) }.bind({ html: post.content.split('<p>{showMore}</p>')[0] });
+
+				if (post.subtitle && post.subtitle !== '')
+					post.preview = function (chunk) { return chunk.write(this.html) }.bind({ html: '<p>'+post.subtitle+'</p>' });
+				else if (post.content && post.content !== '' && post.content !== '<p><br></p>')
+					post.preview = function (chunk) { return chunk.write(this.html) }.bind({ html: post.content.split('</p>')[0]+'</p>' });
+				else
+					post.preview = function (chunk) { return chunk.write(this.html) }.bind({ html: '<p>Click here to edit this post.</p>' });
+
 				post.content = function (chunk) { return chunk.write(this.html) }.bind({ html: post.content.replace(/\<p\>\{showmore\}\<\/p\>/gim,'') });
+
+				post.listTitle = post.title;
+				if (post.listTitle === "")
+					post.listTitle = "Post #"+post._id;
+
 				post.primaryTag = post.tags[0];
 				self.formatDates(post);
 				return post;
@@ -178,7 +194,14 @@ module.exports = {
 				done.reject(new Error(''));
 			else
 			{
-				this.$find({ _id: id })
+				var query = [];
+
+				if (/^[0-9a-fA-F]{24}$/.test(id))
+					query.push({ _id: id })
+
+				query.push({ slug: id });
+
+				this.$find({ $or: query })
 				.then(function (posts) {
 					if (posts[0])
 						self.setAttributes(posts[0]);
@@ -222,6 +245,7 @@ module.exports = {
 		{
 			var _id = self.getAttribute('_id');
 			var user = self.getAttribute('user');
+			console.log(self.getAttributes());
 			if (_.isUndefined(_id)||_.isUndefined(user))
 				done.reject(new Error(''));
 			else

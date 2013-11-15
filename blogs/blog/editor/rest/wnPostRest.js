@@ -54,10 +54,10 @@ module.exports = {
 
 			post.$save()
 			.then(function () {
-				res.end('true');
+				res.jsonp({});
 			})
 			.catch(function () {
-				res.end('false');
+				res.jsonp(500,'failed');
 			});
 		},
 
@@ -65,6 +65,7 @@ module.exports = {
 		 * Action: Update
 		 */
 		update: function(req, res) {
+			
 		    var post = req.post;
 
 		    if (!req.user.data._id)
@@ -79,10 +80,10 @@ module.exports = {
 
 		    post.$update(updates)
 		    .then(function() {
-		        res.end('true');
+		        res.jsonp({});
 		    })
 		    .catch(function () {
-		    	res.end('false');
+		    	res.jsonp(500,'failed');
 		    });
 		},
 
@@ -99,10 +100,10 @@ module.exports = {
 
 		   	post.$remove()
 		   	.then(function() {
-		        res.end('true');
+		        res.jsonp({});
 		    })
 		    .catch(function () {
-		    	res.end('false');
+		    	res.jsonp(500,'failed');
 		    });
 		},
 
@@ -111,7 +112,7 @@ module.exports = {
 		 */
 		read: function (req,res)
 		{
-			res.end(JSON.stringify(req.post.getAttributes()));
+			res.jsonp(req.post.getAttributes());
 		}
 
 	}

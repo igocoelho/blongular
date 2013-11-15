@@ -15,6 +15,8 @@ module.exports = {
 	 */
 	private: {
 		_config: {
+			"servername": "*",
+
 			// Auto import
 			"import": [
 				"classes/",
@@ -33,10 +35,6 @@ module.exports = {
 				"blongular": {
 					"class": "wnBlongularServer"
 				},
-				// wnHttpRequest configuration (remove/comment to disable)
-				"http": {
-					"class": "wnHttpRequest"
-				},
 				// wnDbConnection configuration (remove comment to enable)
 				"database": {
 					"class": "wnDbConnection",
@@ -45,7 +43,7 @@ module.exports = {
 					"address": "127.0.0.1",
 					"port": 27017,
 					"database": "blongular"
-				},
+				}
 			}
 		}
 	},
@@ -55,23 +53,30 @@ module.exports = {
 	 */
 	methods: {
 
+		/**
+		 * Function called when the blog is initialized.
+		 */
 		init: function () {
 			self.moment=moment;
+			self.db.dataObject.driver.set('debug',true);
 			self.db.once('connect',function (e,connected) {
 				if (!connected)
 					self.e.log('Failed to load this BLONGULAR.');
 				else
 					self.e.log('This BLONGULAR is ready.');
 			});
-			self.addListener('readyRequest',function (e,req) {
+			self.prependListener('newRequest',function (e,req,resp) {
 				if (!self.db.connected)
-					req.once('run',function () {
-						req.send('');
-						e.stopPropagation=true;
-					});
+				{
+					resp.statusCode = 503;
+					resp.end();
+				} else
+					e.next();
 			});
-		}
 
+			self.express.enable("jsonp callback");
+		}
+		
 	}
 
 };

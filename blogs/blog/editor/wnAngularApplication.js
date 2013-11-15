@@ -10,7 +10,7 @@ module.exports = {
 	 */
 	private: {
 		_appName: 'blongular',
-		_dependencies: ['ngResource','ngCookies','blongular.post']
+		_dependencies: ['ngResource','ngCookies','blongular.post','blongular.system']
 	},
 
 	/**
