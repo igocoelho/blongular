@@ -220,8 +220,8 @@ module.exports = {
 		 */
 		$update: function (data)
 		{
-			var _id = self.getAttribute('_id');
-			var user = self.getAttribute('user');
+			var _id = self.attr('_id');
+			var user = self.attr('user');
 			if (_.isUndefined(_id)||!_.isObject(data)||_.isUndefined(user))
 				done.reject(new Error(''));
 			else
@@ -243,9 +243,9 @@ module.exports = {
 		 */
 		$remove: function ()
 		{
-			var _id = self.getAttribute('_id');
-			var user = self.getAttribute('user');
-			console.log(self.getAttributes());
+			var _id = self.attr('_id');
+			var user = self.attr('user');
+
 			if (_.isUndefined(_id)||_.isUndefined(user))
 				done.reject(new Error(''));
 			else
@@ -266,7 +266,7 @@ module.exports = {
 		 */
 		$save: function ()
 		{
-			if (_.isUndefined(self.getAttribute('user')))
+			if (_.isUndefined(self.attr('user')))
 				done.reject(new Error(''));
 			else
 			{

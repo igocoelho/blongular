@@ -60,52 +60,57 @@ module.exports = {
 					type: String,
 					label: 'Email',
 					required: true,
-					unique: true
+					unique: true,
+					safe: true
 				},
 				username: {
 					type: String,
 					label: 'Username',
 					require: true,
-					unique: true
+					unique: true,
+					safe: true
 				},
 				password: {
 					type: String,
 					label: 'Password',
-					required: true
+					required: true,
 				},
 				name: {
 					type: String,
-					label: 'Name'
+					label: 'Name',
+					safe: true
 				},
 				displayName: {
 					type: String,
-					label: 'Display Name'
+					label: 'Display Name',
+					safe: true
 				},				
 				createDate: {
 					type: Date,
 					label: 'Created',
-					required: true
-				},
-				updateDate: {
-					type: Date,
-					label: 'Updated'
+					required: true,
+					safe: true
 				},
 				gravatarEmail: {
 					type: String,
 					label: 'Gravatar Email',
-					required: true
+					required: true,
+					safe: true
 				},
 				bio: {
 					type: String,
-					label: 'Bio'
+					label: 'Bio',
+					safe: true
 				},
 				website: {
 					type: String,
-					label: 'Website'
+					label: 'Website',
+					safe: true
 				},
 				location: {
 					type: String,
-					label: 'Location'
+					label: 'Location',
+					safe: true
 				}
 			};
 		},
@@ -119,7 +124,7 @@ module.exports = {
 			{
 				case 'login':
 
-					if (!this.getAttribute('email') || !this.getAttribute('password'))
+					if (!this.attr('email') || !this.attr('password'))
 						done.reject(new Error('MISSING_INFO'));
 					else
 						done.resolve(true);
@@ -128,7 +133,7 @@ module.exports = {
 
 				case 'cadastro':
 
-					if (!this.getAttribute('email') || !this.getAttribute('password') || !this.getAttribute('name'))
+					if (!this.attr('email') || !this.attr('password') || !this.attr('name'))
 						done.reject(new Error('MISSING_INFO'));
 					else
 						done.resolve(true);
@@ -169,15 +174,17 @@ module.exports = {
 		 * Promise: Compare password against bcrypted password.
 		 */
 		$comparePassword: function (pass) {
-			if (!_.isString(pass)||!_.isString(self.getAttribute('password')))
+			if (!_.isString(pass)||!_.isString(self.attr('password')))
 				done.reject(new Error('PROCESS_ERROR'));
 			else 
-				bcrypt.compare(pass, self.getAttribute('password'), function(err, res) {
+			{
+				bcrypt.compare(pass, self.attr('password'), function(err, res) {
 					if (err)
-						done.reject(new Error('PROCESS_ERROR'));
+						done.reject(new Error('INVALID_PASSWORD'));
 				    else
 				    	done.resolve(res);
 				});
+			}
 			return done.promise;
 		},
 
@@ -187,7 +194,7 @@ module.exports = {
 		$login: function (password) {
 			var findUser = {};
 			var password = password;
-			var email = self.getAttribute('email');
+			var email = self.attr('email');
 
 			if (!_.isString(password) || !_.isString(email) || password.length==0 || email.length == 0)
 				done.reject(new Error('Missing information'));
@@ -249,13 +256,13 @@ module.exports = {
 		 * Get gravatar hash for user
 		 */
 		getGravatar: function (cb) {
-			var email = self.getAttribute('gravatarEmail');
+			var email = self.attr('gravatarEmail');
 			if (_.isUndefined(email))
 				cb&&cb();
 			else {
 				var md5sum = crypto.createHash('md5');
 					md5sum.update(email);
-				self.setAttribute('gravatarHash',md5sum.digest('hex'));
+				self.attr('gravatarHash',md5sum.digest('hex'));
 				cb&&cb()
 			}
 		},
@@ -290,8 +297,8 @@ module.exports = {
 		 */
 		$create: function ()
 		{
-			var password = self.getAttribute('password');
-			var email = self.getAttribute('email');
+			var password = self.attr('password');
+			var email = self.attr('email');
 
 			// STEP 1 - Check if email exist.
 			var task = self.$existUser({ email: email })
@@ -327,7 +334,7 @@ module.exports = {
 		 * Promise: Update user
 		 */
 		$update: function (newProps) {
-			if (!_.isObject(newProps) || !self.getAttribute('_id'))
+			if (!_.isObject(newProps) || !self.attr('_id'))
 				done.reject(new Error('PROCESS_ERROR'))
 			else {
 
@@ -338,7 +345,7 @@ module.exports = {
 					if (password)
 						newProps.password = password;
 
-					var _id = self.getAttribute('_id');
+					var _id = self.attr('_id');
 
 					self.clearAttributes();
 					self.setAttribute('_id',_id);
@@ -407,7 +414,7 @@ module.exports = {
 
 			if (!settings.password)
 			{
-				self.getCollection().update({ _id: self.getAttribute('_id') }, { $set: settings }, function (err,s) {
+				self.getCollection().update({ _id: self.attr('_id') }, { $set: settings }, function (err,s) {
 					if (!err && s)
 					{
 						cb&&cb(true);
@@ -418,7 +425,7 @@ module.exports = {
 			{
 				this.encryptPassword(settings.password,function (password) {
 					settings.password = password;
-					self.getCollection().update({ _id: self.getAttribute('_id') }, { $set: settings }, function (err,s) {
+					self.getCollection().update({ _id: self.attr('_id') }, { $set: settings }, function (err,s) {
 						if (!err && s)
 						{
 							cb&&cb(true);
@@ -434,7 +441,7 @@ module.exports = {
 		 */
 		sendActivation: function (cb)
 		{
-			if (self.getAttribute('email') && self.getAttribute('active')!==true)
+			if (self.attr('email') && self.attr('active')!==true)
 			{
 				self.$sendEmail('activation').then(cb).catch(cb);
 			}
@@ -450,7 +457,7 @@ module.exports = {
 		 */
 		$sendEmail: function (view)
 		{
-			var email = self.getAttribute('email');
+			var email = self.attr('email');
 			var app = self.getDbConnection().getParent();
 			if (!_(view).isString()||!_(email).isString())
 				done.reject(new Error('PROCESS_ERROR'));

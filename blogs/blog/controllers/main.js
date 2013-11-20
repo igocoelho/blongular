@@ -106,7 +106,7 @@ module.exports = {
 
 				User.$login(UserPost.password)
 				.then(function (logged) {
-					var data = User.getAttributes();
+					var data = User.getAttributes(true);
 					if (logged)
 					{
 						req.user.data={};

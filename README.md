@@ -17,7 +17,7 @@
 - Easy Plugin System
 - Internationalization (I18N)
 - Search
-- Render Static of Pages
+- Render Static Cache of Pages
 - Full Admin Panel
 - SEO
 - Support Mulitple Template Engines on Themes
@@ -29,7 +29,7 @@ Make sugestions!
 ### Requirements
 
 - Node.JS v0.8.21+
-- MongoDB server
+- MongoDB Database
 
 ### Installing
 

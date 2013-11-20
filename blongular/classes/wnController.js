@@ -53,7 +53,7 @@ module.exports = {
 			if (this.request.user.data.failedLogin)
 				this.request.user.data.failedLogin=false;
 
-			this.clientScript.push('var blongularSession='+JSON.stringify(blongularSession)+';');
+			this.clientScript.push('var blongularSession = '+JSON.stringify(blongularSession)+';');
 
 			this.embedScript.push('/angular.app.js');
 			this.clientScript.push(
@@ -69,7 +69,7 @@ module.exports = {
 				"});"
 			);
 
-			this.clientScript.push("$('.navBtn').tooltip({ placement: 'bottom', container: 'body' })");
+			this.clientScript.push("$('.navBtn').tooltip({ placement: 'bottom', container: 'body' });");
 		}
 
 	}
