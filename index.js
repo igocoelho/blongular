@@ -3,7 +3,7 @@
 
 // Requires WNS Middleware.
 global.WNS_SHOW_LOAD=false;
-require('../wns');
+require('wnserver');
 
 var cons=wns.console;
 var path=require('path');

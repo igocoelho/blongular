@@ -39,7 +39,7 @@
 		"wns-express-package": "0.0.4",
 		"wns-session-package": "0.0.3",
 		"wns-static-package": "0.0.2",
-		"wns-mvc-package": "0.0.10",
+		"wns-mvc-package": "0.0.11",
 		"wns-angular-package": "0.0.3"		
 	}
 }
