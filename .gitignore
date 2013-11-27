@@ -16,4 +16,4 @@ npm-debug.log
 node_modules
 bower_components
 Procfile
-/blogs/blog/upload/*
+/blogs/*
