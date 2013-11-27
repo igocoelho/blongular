@@ -37,6 +37,8 @@
 		// wnControllerServer configuration (remove/comment to disable)
 		"controller": {
 			"class": "wnControllerServer",
+			"debug": true,
+			"verbosity": 5,
 			"defaultController": "main",
 			"errorPage": "main/error"
 		},

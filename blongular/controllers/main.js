@@ -1,7 +1,5 @@
 /**
- * Controller: Site
- *
- * @author Pedro Nasser
+ * Blongular's Main Controller
  */
 
 // Exports
@@ -53,7 +51,7 @@ module.exports = {
 			}).catch(function (err) {
 				console.log(err);
 				self.render('list', { error: err.message });
-			})
+			});
 
 		},
 
@@ -115,22 +113,22 @@ module.exports = {
 						req.user.data.name=data.name||data.email;
 						req.user._logged=true;
 
-						req.user.data.justLogged=true;
+						req.user.data.alert = ['success','Welcome back, <b>'+req.user.data.displayName+'</b>.'];
 						resp.redirect(UserPost.redirect || '/',true);
 					}
 					else
 					{
-						req.user.data.failedLogin=true;
+						req.user.data.alert = ['danger','Sorry, failed to log in.'];
 						resp.redirect(UserPost.redirect || '/',true);
 					}
 				}).catch(function (err) {
-					req.user.data.failedLogin=true;
+					req.user.data.alert = ['danger','Sorry, failed to log in.'];
 					resp.redirect(UserPost.redirect || '/',true);
 				});
 			}
 			else
 			{
-				req.user.data.failedLogin=true;
+				req.user.data.alert = ['danger','Sorry, failed to log in.'];
 				resp.redirect(UserPost.redirect || '/',true);
 			}
 
@@ -242,6 +240,48 @@ module.exports = {
 				resp.redirect('/post/'+_id, true)
 			})
 		},
+
+		/**
+		 * Action: Change profile
+		 */
+		actionProfile: function (req,resp,query,models) {
+
+			var redirect = '/';
+			var userProfile = query.POST.fields.User;
+			var User;
+
+			if (!_.isUndefined(query.POST.fields.redirect))
+				redirect = query.POST.fields.redirect;
+
+			if (!req.user._logged || !userProfile)
+				return resp.redirect(redirect,true);
+
+			if (userProfile.password === '')
+				delete userProfile.password;
+
+			User = models.User();
+			User.$getUser({ _id: req.user.data._id })
+			.then(function (data) {
+				User.setAttributes(data);
+				return User.$update(userProfile)
+			})
+			.then(function (updated) {
+				req.user.data.alert = ['success','Profile updated.'];
+				User.setAttributes(updated._doc);
+				User.getGravatar(function () {
+					_.extend(req.user.data,User.getAttributes());
+					if (userProfile.password)
+						req.user._logged = false;
+					resp.redirect(redirect,true);
+				});
+			})
+			.catch(function () {
+				req.user.data.alert = ['danger','Failed to edit your profile.'];
+				resp.redirect(redirect,true);
+			})
+
+		},
+
 
 		/**
 		 * Action: Logout

@@ -18,16 +18,7 @@ module.exports = {
 			"servername": "*",
 
 			// Auto import
-			"import": [
-				"classes/",
-				"scripts/",
-				"models/",
-				"editor/",
-				"editor/modules/",
-				"editor/resources/",
-				"editor/controllers/",
-				"editor/rest/",
-			],
+			"import": [],
 
 			// Components
 			"components": {
@@ -57,14 +48,35 @@ module.exports = {
 		 * Function called when the blog is initialized.
 		 */
 		init: function () {
+
+			// Import plugins
+			var pluginsPath = self.modulePath+'plugins/';
+			if (!fs.existsSync(pluginsPath))
+				fs.mkdirSync(pluginsPath);
+
+			try {
+				var plugins=fs.readdirSync(pluginsPath)
+				for (p in plugins)
+					if (fs.statSync(pluginsPath+plugins[p]).isDirectory())
+						_config.import.push('plugins/'+plugins[p]);
+				self.importFromConfig();
+			} catch (e) {}
+
+			// Moment
 			self.moment=moment;
+
+			// Debug MongoDB
 			self.db.dataObject.driver.set('debug',true);
+
+			// DB Connection Message
 			self.db.once('connect',function (e,connected) {
 				if (!connected)
 					self.e.log('Failed to load this BLONGULAR.');
 				else
 					self.e.log('This BLONGULAR is ready.');
 			});
+
+			// Block request if not ready.
 			self.prependListener('newRequest',function (e,req,resp) {
 				if (!self.db.connected)
 				{
@@ -74,7 +86,9 @@ module.exports = {
 					e.next();
 			});
 
+			// Enable JSONP on express.
 			self.express.enable("jsonp callback");
+
 		}
 		
 	}

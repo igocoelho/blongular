@@ -16,7 +16,12 @@ cons.setServers({
 			"blongular/",
 			"blongular/config/",
 			"blongular/classes/",
-			"blongular/models/"
+			"blongular/models/",
+			"blongular/editor/modules/",
+			"blongular/editor/resources/",
+			"blongular/editor/controllers/",
+			"blongular/editor/rest/",
+			"blongular/editor/"
 		]
 	}
 });

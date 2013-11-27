@@ -25,14 +25,14 @@ module.exports = {
 	 */
 	public: {
 		errors: {
-			PROCESS_ERROR: 'Erro durante o processamento.',
-			MISSING_INFO: 'Todos os campos devem estar preenchidos',
-			USER_NOTFOUND: 'Não foi possível encontrar esta conta em nosso sistema',
-			USER_EXIST: 'O email submetido já existe em nosso sistema.',
-			EMAIL_INVALID: 'O email submetido é inválido.',
-			PASSWORD_INVALID: 'A senha escolhida não é válida.',
-			LOGIN_INVALID: 'Não foi possível acessar o sistema com essas informações.',
-			EMAIL_INCORRECT: 'O email digitado deve ser o mesmo que sua confirmação'
+			PROCESS_ERROR: 'Error during process',
+			MISSING_INFO: 'All field must be fullfiled',
+			USER_NOTFOUND: 'User not found',
+			USER_EXIST: 'User already exist',
+			EMAIL_INVALID: 'Invalid email',
+			PASSWORD_INVALID: 'Invalid password',
+			LOGIN_INVALID: 'User not found',
+			EMAIL_INCORRECT: 'Incorrect email confirmation'
 		}
 	},
 
@@ -179,7 +179,7 @@ module.exports = {
 			else 
 			{
 				bcrypt.compare(pass, self.attr('password'), function(err, res) {
-					if (err)
+					if (err||!res)
 						done.reject(new Error('INVALID_PASSWORD'));
 				    else
 				    	done.resolve(res);
@@ -361,6 +361,7 @@ module.exports = {
 
 				}
 
+				// Just try to encrypt password (if undefined it skips)
 				self.$encryptPassword(newProps.password).then(save).catch(save);
 
 			}

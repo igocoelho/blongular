@@ -27,9 +27,9 @@
 	    <li class="dropdown" id="login">
 	        <a class="btn btn-gray dropdown-toggle navBtn pull-right {#request.logged}visible-lg{/request.logged}" id="loginBtn" href="#" data-toggle="dropdown" id="navLogin">
 	            <span class="glyphicon glyphicon-user"></span>
-	            {#request.user.data.name}
+	            {#request.user.data.displayName}
 	                <span class='nav-label'>{.}</span>
-	            {/request.user.data.name}
+	            {/request.user.data.displayName}
 	        </a>
 	        {#request.logged}
 	        <div class="dropdown-menu pull-right" id='navForm'>

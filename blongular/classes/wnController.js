@@ -43,15 +43,10 @@ module.exports = {
 				sid: this.request.user._sid,
 				logged: this.request.user._logged,
 				displayName: this.request.user.data.displayName,
-				justLogged: this.request.user.data.justLogged,
-				failedLogin: this.request.user.data.failedLogin
+				alert: this.request.user.data.alert
 			};
 
-			if (this.request.user.data.justLogged)
-				this.request.user.data.justLogged=false;
-
-			if (this.request.user.data.failedLogin)
-				this.request.user.data.failedLogin=false;
+			delete this.request.user.data.alert;
 
 			this.clientScript.push('var blongularSession = '+JSON.stringify(blongularSession)+';');
 

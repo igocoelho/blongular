@@ -40,11 +40,21 @@ module.exports = {
 			
 			$scope.hide(1);
 
-			if (Global.user.justLogged)
-				$scope.show('Welcome back, <b>'+Global.user.displayName+'</b>.','success');
+			if (Global.user.alert && Global.user.alert.length == 2)
+				$scope.show(Global.user.alert[1],Global.user.alert[0]);
 
-			if (Global.user.failedLogin)
-				$scope.show('Sorry, failed to log in.','danger');
+			if (Global.user.logged)
+			{
+				$('#formProfile input, #formProfile textarea').each(function () {
+					$(this).attr('data-initial',$(this).val());
+				});
+				$('#cancelProfile').click(function () {
+					$(this).parent().find('input, textarea').each(function () {
+						$(this).val($(this).attr('data-initial'));
+					});
+					$('.controls .nav .dropdown').removeClass('open');
+				});
+			}
 		},
 
 		/**

@@ -51,6 +51,7 @@ module.exports = {
 			this.importConfig(this.app.modulePath+_config.configPath);
 			this.prepareTheme();
 			this.startComponents();
+			this.prepareControllers();
 		},
 
 		/**
@@ -91,7 +92,7 @@ module.exports = {
 		},
 
 		/**
-		 * Prepare you application to load the correct theme.
+		 * Prepare your application to load the correct theme.
 		 */
 		prepareTheme: function ()
 		{
@@ -103,6 +104,19 @@ module.exports = {
 					path: {
 						views: 'themes/'+this.app.getConfig('theme')+'/views/'
 					}
+				}
+			});
+		},
+
+		/**
+		 * Prepare your application to load controllers on the correct path.
+		 */
+		prepareControllers: function () {
+			var relative = path.relative(this.app.modulePath,_corePath+'/controllers')+'/';
+			console.log(relative);
+			this.app.getComponent('controller').setConfig({
+				path: {
+					controllers: relative
 				}
 			});
 		},
