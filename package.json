@@ -35,7 +35,7 @@
 		"wns-db-package": "0.0.1",
 		"wns-mongo-package": "0.0.4",
 		"wns-template-package": "0.0.3",
-		"wns-http-package": "0.1.3",
+		"wns-http-package": "0.1.4",
 		"wns-express-package": "0.0.4",
 		"wns-session-package": "0.0.3",
 		"wns-static-package": "0.0.2",
