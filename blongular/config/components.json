@@ -10,8 +10,8 @@
 
 		// wnStaticServer configuration (remove/comment to disable)
 		"static": {
-			// "debug": true,
-			// "verbosity": 5,
+			"debug": true,
+			"verbosity": 5,
 			"class": "wnStaticServer"
 		},
 

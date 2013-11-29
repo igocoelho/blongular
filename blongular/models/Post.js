@@ -64,8 +64,7 @@ module.exports = {
 				},				
 				content: {
 					type: String,
-					label: 'Content',
-					required: true
+					label: 'Content'
 				},
 				user: {
 					type: 'ObjectId',

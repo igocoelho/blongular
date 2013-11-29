@@ -152,13 +152,14 @@ module.exports = {
 				source: '',
 				user: req.user.data._id,
 				slug: oid.toString()
-			})
+			});
 
 			post.$save()
 			.then(function () {
 				resp.redirect('/post/'+post.getAttribute('_id')+'#edit', true);
 			})
-			.catch(function () {
+			.catch(function (err) {
+				console.log(err);
 				resp.redirect('/', true)
 			})
 		},
