@@ -49,19 +49,6 @@ module.exports = {
 		 */
 		init: function () {
 
-			// Import plugins
-			var pluginsPath = self.modulePath+'plugins/';
-			if (!fs.existsSync(pluginsPath))
-				fs.mkdirSync(pluginsPath);
-
-			try {
-				var plugins=fs.readdirSync(pluginsPath)
-				for (p in plugins)
-					if (fs.statSync(pluginsPath+plugins[p]).isDirectory())
-						_config.import.push('plugins/'+plugins[p]);
-				self.importFromConfig();
-			} catch (e) {}
-
 			// Moment
 			self.moment=moment;
 

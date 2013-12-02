@@ -52,6 +52,7 @@ module.exports = {
 			this.prepareTheme();
 			this.startComponents();
 			this.prepareControllers();
+			this.loadPlugins();
 		},
 
 		/**
@@ -132,6 +133,32 @@ module.exports = {
 			{
 				this.app.getComponent(c)
 			}
+		},
+
+		/**
+		 * Load Blongular plugins
+		 */
+		loadPlugins: function () {
+			var pluginsPath = self.app.modulePath+'plugins/';
+
+			if (!fs.existsSync(pluginsPath))
+				fs.mkdirSync(pluginsPath);
+
+			try {
+				var plugins=fs.readdirSync(pluginsPath)
+				for (p in plugins)
+					if (fs.statSync(pluginsPath+plugins[p]).isDirectory())
+						self.app.getConfig().import.push('plugins/'+plugins[p]+'/');
+				self.app.importFromConfig();
+			} catch (e) {}
+
+			try {
+				var pluginConfig = fs.readFileSync(self.app.modulePath+'plugins.json');
+				pluginConfig = JSON.parse(pluginConfig.toString('utf8'));
+				self.app.setComponents(pluginConfig);
+				for (c in pluginConfig)
+					self.app.getComponent(c);
+			} catch (e) {}
 		}
 
 	}

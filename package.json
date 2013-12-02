@@ -23,7 +23,7 @@
 		"url": "https://github.com/blongular/blongular/issues"
 	},
 	"dependencies": {
-		"wnserver": "0.0.93",
+		"wnserver": "0.0.94",
 		"node-static": "0.7.x",
 		"mongoose": "3.6.x",
 		"dustjs-linkedin": "2.0.x",
@@ -40,6 +40,6 @@
 		"wns-session-package": "0.0.4",
 		"wns-static-package": "0.0.5",
 		"wns-mvc-package": "0.0.12",
-		"wns-angular-package": "0.0.4"
+		"wns-angular-package": "0.0.5"
 	}
 }
