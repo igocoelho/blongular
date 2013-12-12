@@ -80,7 +80,16 @@ module.exports = {
 							var name = user.name || user.username || user.email || user._id;
 							user.showName = name;
 							Post.setAttribute('user', user);
-							self.render('read', { posts: Post.formatPost(Post.getAttributes()) });
+
+							var formatPost = Post.formatPost(Post.getAttributes());
+							var encodedJSON = JSON.stringify(formatPost,function (key,val) {
+								if (_.isString(val))
+									return encodeURIComponent(val);
+								else
+									return val;
+							});
+							self.clientScript.push("var blongularPost = "+encodedJSON+";");
+							self.render('read', { posts: formatPost });
 						});
 					}
 						

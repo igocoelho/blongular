@@ -30,6 +30,10 @@ module.exports = {
 		 * Initializer
 		 */
 		init: function () {
+
+			if (blongularPost && blongularPost.content)
+				blongularPost.content = decodeURIComponent(blongularPost.content);
+
 			if (Global.user && typeof Global.user.sid == 'string' && Global.user.logged)
 			{
 				$scope.session=Global.user.sid;
@@ -43,7 +47,11 @@ module.exports = {
 		$control: function ()
 		{
 			$scope.editor = [];
-			$scope.editor.push(new MediumEditor('.editable', { placeholder: '' }));
+			$scope.editor.push(new MediumEditor('.editable', {
+				placeholder: '',
+				buttons: ['bold', 'italic', 'underline', 'anchor', 'header1', 'header2', 'quote', 'orderedlist', 'unorderedlist', 'pre']
+			}));
+
 			if (parent.location.hash === "#edit")
 			{
 				$scope.saveInitial();
@@ -106,6 +114,13 @@ module.exports = {
 		 * Edit mode
 		 */
 		$editMode: function () {
+
+			$('.post-body .post-content').html(blongularPost.content);
+			$('.post-body .post-content script').attr('contentEditable', false).each(function () {
+				if ($(this).html() === "" && $(this).attr('src') !== "")
+					$(this).prepend('/* '+$(this).attr('src')+' */');
+			});
+
 			$scope.startMediumImages();
 			$('.medium-editor-placeholder').show();
 			$('.editable').addClass('editing');
@@ -132,6 +147,13 @@ module.exports = {
 					$scope.contentImages.destroy();
 				$scope.textMode();
 				$scope.getChanges();
+				blongularPost.content = $('.post-body .post-content').html();
+
+				$('.post-body .post-content script').each(function () {
+					$(this).after($(this.outerHTML));
+					$(this).remove();
+				});
+
 				if ($scope.changes>0)
 					$scope.update(function () {
 
@@ -156,6 +178,7 @@ module.exports = {
 			$('#edit #cancelBtn').unbind('click').click(function () {
 				$scope.restoreInitial();
 				$scope.normalMode();
+				blongularPost.content = $('.post-body .post-content').html();
 			})
 		},
 
@@ -256,6 +279,7 @@ module.exports = {
 				var code = html.val().replace(/\n/g,"");
 				html.remove();
 				post.html(code).show();
+				blongularPost.content = 
 				$scope.startMediumImages();
 			}
 		},
