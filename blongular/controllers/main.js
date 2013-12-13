@@ -191,12 +191,13 @@ module.exports = {
 					if (blongular.upload.validTypes.indexOf(file.type)!==-1
 						&& file.size <= blongular.upload.maxSize)
 					{
-
 						var uploadDir = self.app.modulePath+'/'+blongular.upload.directory;
 						var userDir = uploadDir + '/' + req.user.data._id;
 						if (!fs.existsSync(userDir))
 						{
-							try { fs.mkdirSync(userDir); } catch (e) {}
+							try { fs.mkdirSync(userDir); fs.chmodSync(userDir, '0777'); } catch (e) {
+								console.log(e);
+							}
 						}
 
 						var ext = file.name.split('.').pop();

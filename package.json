@@ -4,9 +4,6 @@
 	"description": "A simple and powerful blog system using WNS, MongoDB, Angular, Bootstrap and other stuff",
 	"main": "index.js",
 	"moduleClass": "wnServer",
-	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
-	},
 	"repository": {
 		"type": "git",
 		"url": "http://github.com/blongular/blongular"
@@ -23,7 +20,7 @@
 		"url": "https://github.com/blongular/blongular/issues"
 	},
 	"dependencies": {
-		"wnserver": "0.0.94",
+		"wnserver": "0.0.96",
 		"node-static": "0.7.x",
 		"mongoose": "3.6.x",
 		"dustjs-linkedin": "2.0.x",
@@ -31,14 +28,14 @@
 		"moment": "~2.3.1",
 		"express": "*",
 		"formidable": "*",
-		"bcrypt": "0.7.x",
+		"bcrypt": "*",
 		"wns-db-package": "0.0.1",
 		"wns-mongo-package": "0.0.4",
 		"wns-template-package": "0.0.3",
 		"wns-http-package": "0.1.4",
 		"wns-express-package": "0.0.5",
 		"wns-session-package": "0.0.4",
-		"wns-static-package": "0.0.5",
+		"wns-static-package": "0.0.6",
 		"wns-mvc-package": "0.0.13",
 		"wns-angular-package": "0.0.5"
 	}

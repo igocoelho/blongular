@@ -49,6 +49,7 @@ module.exports = {
 			this.app = this.getParent();
 			this.importConfig(_corePath+_configPath);
 			this.importConfig(this.app.modulePath+_config.configPath);
+			this.prepareUpload();
 			this.prepareTheme();
 			this.startComponents();
 			this.prepareControllers();
@@ -93,6 +94,20 @@ module.exports = {
 		},
 
 		/**
+		 * Prepare your blog to handle uploads
+		 */
+		prepareUpload: function ()
+		{
+			var uploadDir = this.app.modulePath+'/'+this.app.getConfig('upload').directory;
+			if (!fs.existsSync(uploadDir))
+			{
+				try { fs.mkdirSync(uploadDir); fs.chmodSync(uploadDir, '0777'); } catch (e) {
+					console.log(e);
+				}
+			}
+		},
+
+		/**
 		 * Prepare your application to load the correct theme.
 		 */
 		prepareTheme: function ()
@@ -114,7 +129,6 @@ module.exports = {
 		 */
 		prepareControllers: function () {
 			var relative = path.relative(this.app.modulePath,_corePath+'/controllers')+'/';
-			console.log(relative);
 			this.app.getComponent('controller').setConfig({
 				path: {
 					controllers: relative
