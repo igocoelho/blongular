@@ -1,7 +1,7 @@
 Blongular v0.0.1 (alpha)
 ======================
  
-!(https://dl.dropboxusercontent.com/u/21773527/blongular.jpg)
+![](https://dl.dropboxusercontent.com/u/21773527/blongular.jpg)
  
 ## Features
  
