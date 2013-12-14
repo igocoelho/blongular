@@ -11,8 +11,8 @@
 
 		// wnStaticServer configuration (remove/comment to disable)
 		"static": {
-			"debug": true,
-			"verbosity": 5,
+			// "debug": true,
+			// "verbosity": 5,
 			"class": "wnStaticServer"
 		},
 
@@ -28,8 +28,6 @@
 			"class": "wnExpress",
 			"use": {
 				"express.favicon": [],
-				// "express.json": [],
-				// "express.urlencoded": [],
 				"express.methodOverride": [],
 				"app.router":true
 			}
@@ -37,9 +35,9 @@
 
 		// wnControllerServer configuration (remove/comment to disable)
 		"controller": {
+			// "debug": true,
+			// "verbosity": 5,
 			"class": "wnControllerServer",
-			"debug": true,
-			"verbosity": 5,
 			"defaultController": "main",
 			"errorPage": "main/error"
 		},

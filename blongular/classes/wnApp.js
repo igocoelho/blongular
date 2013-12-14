@@ -57,10 +57,18 @@ module.exports = {
 
 			// DB Connection Message
 			self.db.once('connect',function (e,connected) {
+
+				if (self.setupMode)
+					return self.e.log('Running using SETUP mode.');
+
 				if (!connected)
-					self.e.log('Failed to load this BLONGULAR.');
+				{
+					self.e.log('Failed to connect to DATABASE.');
+					self.e.log('Run with --setup for setting up database configuration...');
+					process.exit();
+				}
 				else
-					self.e.log('This BLONGULAR is ready.');
+					self.e.log('BLONGULAR is ready.');
 			});
 
 			// Block request if not ready.

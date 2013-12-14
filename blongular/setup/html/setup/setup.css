@@ -1,0 +1,10 @@
+.jumbotron {
+	padding:20px;
+	font-size:15px;
+}
+
+form input {
+	margin-bottom:20px;
+	font-size:20px !important;
+	height: auto !important;
+}

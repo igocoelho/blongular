@@ -7,7 +7,7 @@ require('wnserver');
 
 var cons=wns.console;
 var path=require('path');
-var installMode = (process.argv.indexOf('--install') !== -1);
+var setupMode = (process.argv.indexOf('--setup') !== -1);
 cons.setServers({
 	'#': {
 		"modulePath": path.relative(cons.modulePath,__dirname),
@@ -17,6 +17,7 @@ cons.setServers({
 			"blongular/config/",
 			"blongular/classes/",
 			"blongular/models/",
+			"blongular/setup/",
 			"blongular/editor/modules/",
 			"blongular/editor/resources/",
 			"blongular/editor/controllers/",
@@ -28,9 +29,8 @@ cons.setServers({
 var server = cons.createServer('#');
 server.addListener('loadModule',function (err,appName,app) {
 	app.m={};
-
-	if (installMode)
-		app.installMode=true;
+	
+	app.setupMode = setupMode;
 
 	for (m in server.m)
 		app.m[m] = function () { var m=this.model.model(); m.setParent(this.parent); return m; }.bind({ model: server.m[m], parent: app });

@@ -7,11 +7,11 @@
 		// HTTP server configuration
 		"http": {
 			"debug": true,
-			"verbosity": 5,
+			"verbosity": 1,
 			"class": "wnHttp",
 			"express": true,
 			// You can change Blongular listening port here.
-			"listen":[80]
+			"listen":[27890]
 		}
 	}
 }

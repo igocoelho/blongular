@@ -45,12 +45,14 @@ module.exports = {
 		/**
 		 * Initializer
 		 */
-		init: function () {
+		init: function ()
+		{
 			this.app = this.getParent();
 			this.importConfig(_corePath+_configPath);
 			this.importConfig(this.app.modulePath+_config.configPath);
 			this.prepareUpload();
 			this.prepareTheme();
+			this.prepareSetup();
 			this.startComponents();
 			this.prepareControllers();
 			this.loadPlugins();
@@ -91,6 +93,20 @@ module.exports = {
 			}
 			else
 				return false
+		},
+
+		/**
+		 * Prepare your blog for setup mode.
+		 */
+		prepareSetup: function ()
+		{
+			if (this.app.setupMode)
+			{
+				_components.static.serve.push('../../blongular/setup/html');
+				_components.setup = {
+					"class": "wnBlongularSetup"
+				};
+			}
 		},
 
 		/**
