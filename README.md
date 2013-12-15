@@ -1,10 +1,8 @@
 Blongular v0.0.1 (alpha)
-======================
-
-# This is Blongular! 
+==========================
 
 ![](https://dl.dropboxusercontent.com/u/21773527/blongular.jpg)
- 
+
 ## Features
 - WYSIWYG Editor ([Medium Editor](https://github.com/daviferreira/medium-editor))
 - Theme Support (DustJS as template engine)
@@ -14,7 +12,7 @@ Blongular v0.0.1 (alpha)
 - Multiple Domain Support
 - Gravatar Support
 - Setup Manager
- 
+
 ## Coming Soon™
 
 - Support Other Template Engines (like Jade)
@@ -23,18 +21,18 @@ Blongular v0.0.1 (alpha)
 - Search
 - Static Content Rendering Mode
 - Search Engine Optimization
- 
+
 Make sugestions!
- 
+
 # Quick Start
- 
+
 ## Requirements
- 
+
 - Node.JS v0.8.21+ and NPM
 - MongoDB Database
- 
+
 ## Install
- 
+
 - Download the lastest version of Blongular. ([Download ZIP](http://blongular.com/latest.zip) | [Download TAR](http://blongular.com/latest.tar.gz))
 - Decompress it.
 - Inside the new directory created, type: `npm install`
@@ -51,16 +49,16 @@ Now let's setup your new blongular.
 You can run using the development mode for editing your blog without restarting.
 
       $ npm start --dev
- 
+
 # Structure
- 
+
 ## Blongular's directory
- 
+
 ```
 /blogs/                 Directory where you put all your blongular blogs
 config.json             Blongular server configuration
 ```
- 
+
 The rest you should ignore, unless you want to edit blongular's behavior.
 
 ## Blongular's Blog directory
