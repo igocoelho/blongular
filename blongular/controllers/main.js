@@ -122,7 +122,7 @@ module.exports = {
 						req.user.data.name=data.name||data.email;
 						req.user._logged=true;
 
-						req.user.data.alert = ['success','Welcome back, <b>'+req.user.data.displayName+'</b>.'];
+						req.user.data.alert = ['success','Welcome back, <b>'+(data.displayName||data.username||data.email)+'</b>.'];
 						resp.redirect(UserPost.redirect || '/',true);
 					}
 					else
