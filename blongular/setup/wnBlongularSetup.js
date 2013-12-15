@@ -73,6 +73,8 @@ module.exports = {
 						return resp.end();
 					} else {
 						var fields = req.query.POST.fields;
+						var database = self.app.getComponent('database');
+
 						if (_.isObject(fields.blongular) && _.isObject(fields.components))
 						{
 							try {
@@ -88,8 +90,13 @@ module.exports = {
 
 								var componentsConfig = JSON.parse(fs.readFileSync(componentsJson));
 								_.merge(componentsConfig.components,fields.components);
-								self.app.getComponent('database').setConfig(componentsConfig.components.database);
-								self.app.getComponent('database').dataObject.setConfig(componentsConfig.components.database);
+
+								database.setConfig(componentsConfig.components.database);
+								database.dataObject.setConfig(componentsConfig.components.database);
+
+								var socket = database.dataObject.getConfig('server').socketOptions;
+								socket.host = componentsConfig.components.database.address;
+								socket.port = componentsConfig.components.database.port;
 
 								fs.writeFileSync(blongularJson,JSON.stringify(blongularConfig,null,'\t'));
 								fs.writeFileSync(componentsJson,JSON.stringify(componentsConfig,null,'\t'));
@@ -98,7 +105,6 @@ module.exports = {
 								console.log(e);
 							}
 
-							var database = self.app.getComponent('database');
 							database.once('connect',function (e,connected) {
 				                              
 								if (connected)
