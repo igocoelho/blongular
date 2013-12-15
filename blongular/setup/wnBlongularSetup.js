@@ -100,6 +100,7 @@ module.exports = {
 
 							var database = self.app.getComponent('database');
 							database.once('connect',function (e,connected) {
+				                              
 								if (connected)
 								{
 
@@ -134,6 +135,7 @@ module.exports = {
 
 							});
 							database.connect();
+
 						} else {
 							resp.writeHead(307,{
 								Location: '/setup.html#error'
@@ -156,7 +158,11 @@ module.exports = {
 			{
 				if (deep <= 5)
 					for (o in obj)
+					{
 						obj[o]=self.verifyConfiguration(obj[o],deep+1);
+						if (_.isUndefined(obj[o]))
+						delete obj[o];
+					}
 
 				return obj;
 			} else

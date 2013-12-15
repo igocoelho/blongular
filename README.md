@@ -33,7 +33,7 @@ Make sugestions!
 
 ## Install
 
-- Download the lastest version of Blongular. ([Download ZIP](https://github.com/blongular/blongular-release/archive/0.0.1.zip) | [Download TAR](https://github.com/blongular/blongular-release/archive/0.0.1.tar.gz))
+- Download the lastest version of Blongular. ([Download ZIP](https://github.com/blongular/blongular-release/archive/master.zip) | [Download TAR](https://github.com/blongular/blongular-release/archive/master.tar.gz))
 - Decompress it.
 - Inside the new directory created, type: `npm install`
 
@@ -41,14 +41,14 @@ Make sugestions!
 
 Now let's setup your new blongular.
 
-- Inside blongular's directory, type: `npm start --setup`
+- Inside blongular's directory, type: `node blongular --setup`
 - Visit `http://<your ip address or localhost>:27890/` on your browser.]
 
 ## Blog Development (--dev) 
 
 You can run using the development mode for editing your blog without restarting.
 
-      $ npm start --dev
+      $ node blongular --dev
 
 # Structure
 
