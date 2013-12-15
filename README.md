@@ -33,7 +33,7 @@ Make sugestions!
 
 ## Install
 
-- Download the lastest version of Blongular. ([Download ZIP](http://blongular.com/latest.zip) | [Download TAR](http://blongular.com/latest.tar.gz))
+- Download the lastest version of Blongular. ([Download ZIP](https://github.com/blongular/blongular-release/archive/0.0.1.zip) | [Download TAR](https://github.com/blongular/blongular-release/archive/0.0.1.tar.gz))
 - Decompress it.
 - Inside the new directory created, type: `npm install`
 
