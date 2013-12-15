@@ -44,7 +44,7 @@ Now let's setup your new blongular.
 - Inside blongular's directory, type: `npm start --setup`
 - Visit `http://<your ip address or localhost>:27890/` on your browser.]
 
-## Development (--dev) 
+## Blog Development (--dev) 
 
 You can run using the development mode for editing your blog without restarting.
 
@@ -72,7 +72,17 @@ plugins.json            Blog's plugins configurations
 
 # Support & Contribute
 
-Feel welcome to open **PR/Issues/Features/Suggestions** but [read this first](http://github.com/blongular/blongular), please.
+Feel welcome to open **PR/Issues/Features/Suggestions** but [read this first](https://github.com/blongular/blongular/blob/master/CONTRIBUTING.md), please.
+
+# Development Flow
+
+*requires npm, bower and grunt*
+
+- Clone this repository.
+- Type `npm install` for installing npm dependencies
+- Type `bower install` for installing bower dependencies
+- Clone the [Blongular Default Theme](http://github.com/blongular/blongular-theme-default) inside the `blogs` directory`
+- Clone and compile [Blongular Blog Seed](http://github.com/blongular/blongular-seed) inside the new blog's `theme` directory
 
 # MIT License
 
